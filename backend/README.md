@@ -136,7 +136,7 @@ backend/
 ## ⚙️ INSTALLATION
 
 ```bash
-git clone https://github.com/sri-lalitha02/collaborative-network
+git clone [https://github.com/sri-lalitha02/collaborative-network]
 cd backend
 npm install
 
