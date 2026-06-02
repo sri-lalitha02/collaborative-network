@@ -22,7 +22,7 @@ const {
  *   description: Team management APIs
  */
 
-// ================= CREATE TEAM =================
+/// ================= CREATE TEAM =================
 /**
  * @swagger
  * /api/team/create:
@@ -40,10 +40,14 @@ const {
  *     responses:
  *       201:
  *         description: Team created successfully
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Server error
  */
 router.post("/create", protect, createTeam);
 
-// ================= GET ALL TEAMS =================
+/// ================= GET ALL TEAMS =================
 /**
  * @swagger
  * /api/team/all:
@@ -55,10 +59,110 @@ router.post("/create", protect, createTeam);
  *     responses:
  *       200:
  *         description: List of teams
+ *       401:
+ *         description: Unauthorized
  */
 router.get("/all", protect, getTeams);
 
-// ================= GET TEAM BY ID =================
+/// ================= JOIN TEAM =================
+/**
+ * @swagger
+ * /api/team/join/{id}:
+ *   post:
+ *     summary: Join a team
+ *     tags: [Team]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Joined team successfully
+ *       404:
+ *         description: Team not found
+ */
+router.post("/join/:id", protect, joinTeam);
+
+/// ================= LEAVE TEAM =================
+/**
+ * @swagger
+ * /api/team/leave/{id}:
+ *   post:
+ *     summary: Leave a team
+ *     tags: [Team]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Left team successfully
+ */
+router.post("/leave/:id", protect, leaveTeam);
+
+/// ================= ADD MEMBER =================
+/**
+ * @swagger
+ * /api/team/add-member/{id}:
+ *   post:
+ *     summary: Add member to team
+ *     tags: [Team]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AddMemberRequest'
+ *     responses:
+ *       200:
+ *         description: Member added successfully
+ */
+router.post("/add-member/:id", protect, addMember);
+
+/// ================= REMOVE MEMBER =================
+/**
+ * @swagger
+ * /api/team/remove-member/{id}:
+ *   post:
+ *     summary: Remove member from team
+ *     tags: [Team]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/AddMemberRequest'
+ *     responses:
+ *       200:
+ *         description: Member removed successfully
+ */
+router.post("/remove-member/:id", protect, removeMember);
+
+/// ================= GET TEAM BY ID =================
 /**
  * @swagger
  * /api/team/{id}:
@@ -81,7 +185,7 @@ router.get("/all", protect, getTeams);
  */
 router.get("/:id", protect, getTeamById);
 
-// ================= UPDATE TEAM =================
+/// ================= UPDATE TEAM =================
 /**
  * @swagger
  * /api/team/{id}:
@@ -98,11 +202,11 @@ router.get("/:id", protect, getTeamById);
  *             $ref: '#/components/schemas/TeamCreateRequest'
  *     responses:
  *       200:
- *         description: Team updated
+ *         description: Team updated successfully
  */
 router.put("/:id", protect, updateTeam);
 
-// ================= DELETE TEAM =================
+/// ================= DELETE TEAM =================
 /**
  * @swagger
  * /api/team/{id}:
@@ -111,82 +215,16 @@ router.put("/:id", protect, updateTeam);
  *     tags: [Team]
  *     security:
  *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
  *     responses:
  *       200:
- *         description: Team deleted
+ *         description: Team deleted successfully
  */
 router.delete("/:id", protect, deleteTeam);
-
-// ================= JOIN TEAM =================
-/**
- * @swagger
- * /api/team/join/{id}:
- *   post:
- *     summary: Join a team
- *     tags: [Team]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Joined team successfully
- */
-router.post("/join/:id", protect, joinTeam);
-
-// ================= LEAVE TEAM =================
-/**
- * @swagger
- * /api/team/leave/{id}:
- *   post:
- *     summary: Leave a team
- *     tags: [Team]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: Left team successfully
- */
-router.post("/leave/:id", protect, leaveTeam);
-
-// ================= ADD MEMBER =================
-/**
- * @swagger
- * /api/team/add-member/{id}:
- *   post:
- *     summary: Add member to team
- *     tags: [Team]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/AddMemberRequest'
- *     responses:
- *       200:
- *         description: Member added
- */
-router.post("/add-member/:id", protect, addMember);
-
-// ================= REMOVE MEMBER =================
-/**
- * @swagger
- * /api/team/remove-member/{id}:
- *   post:
- *     summary: Remove member from team
- *     tags: [Team]
- *     security:
- *       - bearerAuth: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/AddMemberRequest'
- *     responses:
- *       200:
- *         description: Member removed
- */
-router.post("/remove-member/:id", protect, removeMember);
 
 module.exports = router;
